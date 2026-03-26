@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Train Toilet Monitoring System</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="light-theme">
+  <!-- Notifications Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Login Overlay Modal -->
+  <div id="login-overlay" class="login-overlay hidden">
+    <div class="login-box glass-panel shadow-md">
+      <div class="logo" style="justify-content: center; margin-bottom: 20px;">
+        <div class="logo-icon"></div>
+        <h2 style="font-size: 1.5rem">Staff Portal</h2>
+      </div>
+      <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Sign in to access dashboard and
+        alerts.</p>
+
+      <div class="form-group">
+        <label>Worker Name</label>
+        <input type="text" id="login-name" class="glass-input" placeholder="e.g. John Doe">
+      </div>
+      <div class="form-group">
+        <label>Access Code / Password</label>
+        <input type="password" id="login-pass" class="glass-input" placeholder="••••••••">
+      </div>
+
+      <button class="glass-btn primary-btn" style="width: 100%; margin-top: 10px;"
+        onclick="handleLogin()">Authenticate</button>
+      <button class="glass-btn"
+        style="width: 100%; margin-top: 10px; background: transparent; border: none; font-size: 0.9rem;"
+        onclick="toggleLogin(false)">Cancel</button>
+    </div>
+  </div>
+
+  <!-- App Shell -->
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar glass-panel shadow-sm">
+      <div class="logo">
+        <div class="logo-icon"></div>
+        <h2>RailHygiene</h2>
+      </div>
+      <div class="train-selector" style="margin-bottom: 20px; padding: 0 8px;">
+        <label for="global-train-select" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Active
+          Train:</label>
+        <select id="global-train-select" class="glass-select" style="width: 100%; margin-top: 4px;">
+          <!-- Options dynamically populated by JS -->
+        </select>
+      </div>
+      <nav class="nav-menu" id="main-nav">
+        <!-- Dashboard & Worker links are injected/hidden by JS based on role -->
+        <button class="nav-btn auth-worker hidden" data-view="dashboard">Dashboard</button>
+        <button class="nav-btn active" data-view="map">Live Train Map</button>
+        <button class="nav-btn auth-worker hidden" data-view="worker">Worker Tasks & History</button>
+        <button class="nav-btn" data-view="passenger">Passenger Interface</button>
+        <button class="nav-btn auth-worker hidden" data-view="insights">Insights</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="auth-btn" class="glass-btn" style="width: 100%; margin-bottom: 15px; font-size: 0.9rem;"
+          onclick="toggleLogin(true)">Staff Login</button>
+        <div class="system-status">
+          <span class="status-dot green"></span> System Online
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar glass-panel shadow-sm" style="display: flex; gap: 20px;">
+        <h1 id="view-title" style="min-width: 250px;">Live Train Map</h1>
+      </header>
+
+      <!-- View Containers -->
+      <div id="view-dashboard" class="view-container"></div>
+      <div id="view-map" class="view-container active"></div>
+      <div id="view-worker" class="view-container"></div>
+      <div id="view-passenger" class="view-container"></div>
+      <div id="view-insights" class="view-container"></div>
+    </main>
+  </div>
+
+  <!-- Floating Chatbot Widget -->
+  <div class="chatbot-widget">
+    <button id="chatbot-toggle" class="chatbot-toggle glass-btn">💬 RailClean AI</button>
+    <div id="chatbot-panel" class="chatbot-panel glass-panel hidden shadow-md">
+      <div class="chat-header">
+        <h3>RailClean AI Assistant</h3>
+        <button id="chatbot-close">✖</button>
+      </div>
+      <div class="chat-body" id="chat-body">
+        <div class="msg bot">Hello! I am your RailClean AI Assistant. I can help you monitor hygiene status, cleaning
+          alerts, and water levels.</div>
+      </div>
+      <div class="chat-quick-replies"
+        style="padding: 10px; background: rgba(0,0,0,0.02); display: flex; gap: 8px; overflow-x: auto; border-top: 1px solid var(--glass-border); white-space: nowrap;">
+        <button class="glass-btn" style="padding: 6px 12px; font-size: 0.8rem;"
+          onclick="sendQuickReply('cleaning status')">Check Cleaning Status</button>
+        <button class="glass-btn" style="padding: 6px 12px; font-size: 0.8rem;"
+          onclick="sendQuickReply('water status')">Water Status</button>
+        <button class="glass-btn" style="padding: 6px 12px; font-size: 0.8rem;"
+          onclick="sendQuickReply('odour status')">Odour Status</button>
+        <button class="glass-btn" style="padding: 6px 12px; font-size: 0.8rem;"
+          onclick="sendQuickReply('show alerts')">Show Alerts</button>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Ask something..." autocomplete="off">
+        <button id="chat-send">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
